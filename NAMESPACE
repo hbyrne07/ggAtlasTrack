@@ -3,3 +3,4 @@
 export(atlastrack_plot)
 export(atlastrack_tract_names)
 export(atlastrack_views_available)
+import(sf)

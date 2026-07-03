@@ -15,6 +15,7 @@ Imports:
     grDevices,
     grid,
     rlang,
+    sf,
     stats,
     tibble
 Suggests:
