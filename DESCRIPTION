@@ -3,27 +3,27 @@ Title: ggplot2 Visualisation Tools for AtlasTrack White Matter Tracts
 Version: 0.0.0.9000
 Authors@R: 
     person("Hollie", "Byrne", , "hollie.byrne@sydney.edu.au", role = c("aut", "cre"))
-Description: Provides ggplot2-based two-dimensional visualisations of AtlasTrack white-matter tract polygons in ggseg-style axial, coronal, sagittal, and split axial views. Supports categorical tract plots and tract-level continuous values.
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Description: Provides ggplot2-based two-dimensional visualisations of AtlasTrack white-matter tract polygons in three view sets - orthogonal, ggseg, and axial. Supports categorical tract plots and tract-level continuous values.
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 8.0.0
-Imports: 
+LazyDataCompression: xz
+Imports:
     dplyr,
     ggplot2,
     grDevices,
     grid,
     rlang,
-    sf,
     stats,
     tibble
-Suggests: 
+Suggests:
     knitr,
-    purrr,
-    readr,
     rmarkdown,
-    smoothr
+    sf,
+    smoothr,
+    readr,
+    purrr
 Depends: 
     R (>= 3.5)
 LazyData: true
