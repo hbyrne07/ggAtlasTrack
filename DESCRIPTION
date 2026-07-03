@@ -28,3 +28,5 @@ Depends:
     R (>= 3.5)
 LazyData: true
 VignetteBuilder: knitr
+URL: https://github.com/hbyrne07/ggAtlasTrack
+BugReports: https://github.com/hbyrne07/ggAtlasTrack/issues
