@@ -8,7 +8,7 @@ atlastrack_plot(
   data = NULL,
   value = NULL,
   tract_name = "tract_name",
-  view_set = c("orthogonal", "ggseg"),
+  view_set = c("orthogonal", "ggseg", "axial"),
   show_ventricles = TRUE,
   low = "#E8EEF7",
   high = "#2166AC",

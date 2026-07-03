@@ -16,7 +16,7 @@ atlastrack_plot <- function(
     data = NULL,
     value = NULL,
     tract_name = "tract_name",
-    view_set = c("orthogonal", "ggseg"),
+    view_set = c("orthogonal", "ggseg", "axial"),
     show_ventricles = TRUE,
     low = "#E8EEF7",
     high = "#2166AC",
@@ -55,6 +55,9 @@ atlastrack_plot <- function(
     dplyr::case_when(
       x == "upper_axial" ~ "upper\naxial",
       x == "lower_axial" ~ "lower\naxial",
+      x == "inferior_axial" ~ "inferior\naxial",
+      x == "middle_axial" ~ "middle\naxial",
+      x == "superior_axial" ~ "superior\naxial",
       x == "axial" ~ "axial",
       x == "coronal" ~ "coronal",
       x == "sagittal" ~ "sagittal",
@@ -64,8 +67,12 @@ atlastrack_plot <- function(
 
   panel_levels <- if (view_set == "orthogonal") {
     c("axial", "coronal", "sagittal")
-  } else {
+  } else if (view_set == "ggseg") {
     c("upper\naxial", "coronal", "lower\naxial")
+  } else if (view_set == "inferior") {
+    c("axial", "coronal", "inferior\naxial")
+  } else if (view_set == "axial") {
+    c("inferior\naxial", "middle\naxial", "superior\naxial")
   }
 
   add_panel_label <- function(x) {

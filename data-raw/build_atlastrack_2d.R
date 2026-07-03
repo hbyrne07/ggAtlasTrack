@@ -565,7 +565,7 @@ build_atlastrack_view_set <- function(
     st_make_valid() %>%
     smoothr::smooth(
       method = "ksmooth",
-      smoothness = 3
+      smoothness = 5
     ) %>%
     st_make_valid()
 
@@ -729,7 +729,8 @@ build_atlastrack_view_set <- function(
 
 preferred_view_sets <- c(
   "ggseg",
-  "orthogonal"
+  "orthogonal",
+  "axial"
 )
 
 available_view_sets <- preferred_view_sets[

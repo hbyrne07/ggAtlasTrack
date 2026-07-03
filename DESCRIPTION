@@ -16,7 +16,8 @@ Imports:
     grid,
     rlang,
     sf,
-    stats
+    stats,
+    tibble
 Suggests: 
     knitr,
     purrr,
@@ -26,3 +27,4 @@ Suggests:
 Depends: 
     R (>= 3.5)
 LazyData: true
+VignetteBuilder: knitr
