@@ -5,10 +5,19 @@ output: github_document
 
 # ggAtlasTrack
 
-`ggAtlasTrack` provides ggplot2-based visualisation tools for AtlasTrack white-matter tracts for use in datasets such as ABCD.
+`ggAtlasTrack` provides `ggplot2`-based visualisation tools for AtlasTrack white-matter tract polygons, inspired by the `ggseg` ecosystem (Mowinckel & Vidal-Piñeiro, 2020). `ggAtlasTrack` follows a similar plotting philosophy for AtlasTrack white-matter tract visualisation, while providing package-specific view sets and tract-level data mapping.
+
+The package can be used to visualise the AtlasTrack tract atlas or to map tract-level continuous values, such as coefficients, association statistics, or significance scores. It also contains helper functions for plotting data directly from the Adolescent Brain Cognitive Development (ABCD) study releases 5.0 and 6.0 onwards. Please see the vignette for further information on use.
 
 ## Installation
 
 ```{r, eval=FALSE}
 # install.packages("remotes")
 remotes::install_github("hbyrne07/ggAtlasTrack")
+```
+
+## References
+
+Hagler, D. J., Jr., Ahmadi, M. E., Kuperman, J., Holland, D., McDonald, C. R., Halgren, E., & Dale, A. M. (2009). Automated white-matter tractography using a probabilistic diffusion tensor atlas: Application to temporal lobe epilepsy. *Human Brain Mapping, 30*(5), 1535–1547. https://doi.org/10.1002/hbm.20619
+
+Mowinckel, A. M., & Vidal-Piñeiro, D. (2020). Visualization of brain statistics with R packages ggseg and ggseg3d. *Advances in Methods and Practices in Psychological Science, 3*(4), 466–483. https://doi.org/10.1177/2515245920928009
