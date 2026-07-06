@@ -17,7 +17,8 @@ Imports:
     rlang,
     sf,
     stats,
-    tibble
+    tibble,
+    tidyr
 Suggests:
     knitr,
     rmarkdown,

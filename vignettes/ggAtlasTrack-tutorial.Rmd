@@ -1,8 +1,8 @@
 ---
-title: "ggAtlasTrack-tutorial"
+title: "Using ggAtlasTrack"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{ggAtlasTrack-tutorial}
+  %\VignetteIndexEntry{Using ggAtlasTrack}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -10,10 +10,167 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 8,
+  fig.height = 4,
+  fig.align = "center"
 )
 ```
+
+# Overview
+
+`ggAtlasTrack` provides `ggplot2`-based visualisation tools for AtlasTrack white-matter tract polygons, inspired by the `ggseg` ecosystem (Mowinckel & Vidal-Piñeiro, 2020). `ggAtlasTrack` follows a similar plotting philosophy for AtlasTrack white-matter tract visualisation, while providing package-specific view sets and tract-level data mapping. The package can be used to visualise the AtlasTrack tract atlas or to map tract-level continuous values, such as coefficients, association statistics, or significance scores.
 
 ```{r setup}
 library(ggAtlasTrack)
 ```
+
+# Available view sets
+
+The available plotting views can be listed using `atlastrack_views_available()`.
+
+```{r available-views}
+atlastrack_views_available()
+```
+
+# Plotting the default view
+
+By default, `atlastrack_plot()` displays the orthogonal view set.
+
+```{r orthogonal-plot}
+atlastrack_plot()
+```
+
+This is equivalent to:
+
+```{r orthogonal-code-only, eval = FALSE}
+atlastrack_plot(view_set = "orthogonal")
+```
+
+# Plotting the ggseg-style view
+
+The `"ggseg"` view displays a split axial/coronal layout inspired by the visual style of `ggseg`.
+
+```{r ggseg-plot}
+atlastrack_plot(view_set = "ggseg")
+```
+
+# Plotting the axial view
+
+The `"axial"` view displays inferior, middle, and superior axial slices. This can be useful for visualising inferior/anterior tracts, such as the uncinate fasciculus, which cannot be seen in the default orthogonal or ggseg views.
+
+```{r axial-plot}
+atlastrack_plot(view_set = "axial")
+```
+
+# Listing available tract names
+
+The available tract abbreviations and full tract names can be listed using `atlastrack_tract_names()`.
+
+```{r tract-names}
+atlastrack_tract_names()
+```
+
+# Plotting tract-level values
+
+Users can provide a data frame containing one row per tract and a continuous value to map onto the atlas.
+
+In this example, we create random tract-level values called `feature_importance`.
+
+```{r example-data}
+set.seed(1)
+
+tract_values <- tibble::tibble(
+  tract_name = unique(atlastrack_tracts$tract_name),
+  feature_importance = runif(
+    length(unique(atlastrack_tracts$tract_name)),
+    0,
+    1
+  )
+)
+
+head(tract_values)
+```
+
+The `value` argument specifies which column should be mapped to tract fill.
+
+```{r feature-importance-plot}
+atlastrack_plot(
+  data = tract_values,
+  value = feature_importance,
+  view_set = "orthogonal",
+  legend_title = "Feature\nimportance"
+)
+```
+
+# Setting colour scale limits
+
+By default, the colour scale is based on the range of the supplied data. To anchor the scale at zero, use the `limits` argument.
+
+```{r feature-importance-plot-limits}
+atlastrack_plot(
+  data = tract_values,
+  value = feature_importance,
+  view_set = "orthogonal",
+  limits = c(0, max(tract_values$feature_importance, na.rm = TRUE)),
+  legend_title = "Feature\nimportance"
+)
+```
+
+# Customising colours
+
+The low and high colours can be changed using the `low` and `high` arguments.
+
+```{r custom-colours}
+atlastrack_plot(
+  data = tract_values,
+  value = feature_importance,
+  view_set = "axial",
+  low = "grey95",
+  high = "#2166AC",
+  limits = c(0, max(tract_values$feature_importance, na.rm = TRUE)),
+  legend_title = "Feature\nimportance"
+)
+```
+
+# Hiding ventricles
+
+Ventricles are displayed by default. They can be hidden using `show_ventricles = FALSE`.
+
+```{r hide-ventricles}
+atlastrack_plot(
+  view_set = "orthogonal",
+  show_ventricles = FALSE
+)
+```
+
+# Saving figures
+
+Because `atlastrack_plot()` returns a `ggplot` object, figures can be saved using `ggplot2::ggsave()`.
+
+```{r save-figure, eval = FALSE}
+p <- atlastrack_plot(view_set = "axial")
+
+ggplot2::ggsave(
+  filename = "atlastrack_axial.png",
+  plot = p,
+  width = 8,
+  height = 4,
+  dpi = 300
+)
+```
+
+# Notes on interpretation
+
+These plots are two-dimensional visualisations of preprocessed AtlasTrack tract polygons. The view sets are designed to balance anatomical readability and tract coverage.
+
+Some tracts may be more clearly visible in one view set than another. For example, inferior/anterior tracts may be better visualised in the axial view than in the default orthogonal view.
+
+# References
+
+Hagler, D. J., Jr., Ahmadi, M. E., Kuperman, J., Holland, D., McDonald, C. R., Halgren, E., & Dale, A. M. (2009). Automated white-matter tractography using a probabilistic diffusion tensor atlas: Application to temporal lobe epilepsy. *Human Brain Mapping, 30*(5), 1535–1547. https://doi.org/10.1002/hbm.20619
+
+Mowinckel, A. M., & Vidal-Piñeiro, D. (2020). Visualization of brain statistics with R packages ggseg and ggseg3d. *Advances in Methods and Practices in Psychological Science, 3*(4), 466–483. https://doi.org/10.1177/2515245920928009
+
+
+
