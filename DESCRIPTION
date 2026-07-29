@@ -17,6 +17,7 @@ Imports:
     rlang,
     sf,
     stats,
+    stringr,
     tibble,
     tidyr
 Suggests:

@@ -8,8 +8,9 @@ atlastrack_plot(
   data = NULL,
   value = NULL,
   tract_name = "tract_name",
-  view_set = c("orthogonal", "ggseg", "axial"),
+  view_set = c("orthogonal", "split", "axial"),
   show_ventricles = TRUE,
+  tract_labels = c("abbrev", "full"),
   low = "#E8EEF7",
   high = "#2166AC",
   limits = NULL,
@@ -23,9 +24,11 @@ atlastrack_plot(
 
 \item{tract_name}{Name of the tract-name column in \code{data}.}
 
-\item{view_set}{View set to plot. One of \code{"orthogonal"} or \code{"ggseg"}.}
+\item{view_set}{View set to plot. One of \code{"orthogonal"}, \code{"split"}, or \code{"axial"}.}
 
 \item{show_ventricles}{Logical. Whether to show ventricles.}
+
+\item{tract_labels}{Label style for the categorical tract legend. One of \code{"abbrev"} or \code{"full"}.}
 
 \item{low}{Low colour for continuous values.}
 

@@ -71,6 +71,27 @@ The available tract abbreviations and full tract names can be listed using `atla
 atlastrack_tract_names()
 ```
 
+# Showing full tract names in the legend
+
+By default, `atlastrack_plot()` uses abbreviated AtlasTrack tract names in the legend. Full tract names can be shown using `tract_labels = "full"`.
+
+```{r atlas-full-labels}
+atlastrack_plot(
+  tract_labels = "full"
+)
+```
+
+This option is useful when preparing explanatory figures or tutorials. For compact manuscript figures, the abbreviated tract labels may be easier to read.
+
+The same option can be used with other view sets:
+
+```{r split-full-labels}
+atlastrack_plot(
+  view_set = "split",
+  tract_labels = "full"
+)
+```
+
 # Plotting tract-level values
 
 Users can provide a data frame containing one row per tract and a continuous value to map onto the atlas.
@@ -126,8 +147,8 @@ atlastrack_plot(
   data = tract_values,
   value = feature_importance,
   view_set = "axial",
-  low = "grey95",
-  high = "#2166AC",
+  low = "orange",
+  high = "purple",
   limits = c(0, max(tract_values$feature_importance, na.rm = TRUE)),
   legend_title = "Feature\nimportance"
 )
@@ -166,11 +187,200 @@ These plots are two-dimensional visualisations of preprocessed AtlasTrack tract 
 
 Some tracts may be more clearly visible in one view set than another. For example, inferior/anterior tracts may be better visualised in the axial view than in the default orthogonal view.
 
+# Working with ABCD DTI variables
+
+ABCD DTI data are usually stored in wide format, with one row per participant or participant/time point and one column per tract-specific DTI variable.
+
+For example, an ABCD 6.0 DTI data frame might look like this:
+
+```text
+participant_id | session_id | mr_y_dti__fs__fa__at__atr__lh_wmean | mr_y_dti__fs__fa__at__atr__rh_wmean | ...
+---------------|-----------|-------------------------------------|-------------------------------------|----
+sub-001        | ses-00A  | 0.42                                | 0.39                                | ...
+sub-002        | ses-00A  | 0.45                                | 0.41                                | ...
+```
+
+`ggAtlasTrack` includes helper functions for matching ABCD DTI variable names to the tract names used by `atlastrack_plot()`.
+
+# Looking up ABCD DTI variable names
+
+The `atlastrack_abcd_lookup()` function returns a lookup table linking ABCD DTI variable names to AtlasTrack tract names.
+
+By default, it returns ABCD 6.0 full-shell FA variables:
+
+```{r abcd-lookup-default}
+atlastrack_abcd_lookup()
+```
+
+This is equivalent to:
+
+```{r abcd-lookup-fa}
+atlastrack_abcd_lookup(
+  version = "6.0",
+  metric = "fa",
+  shell = "fs"
+)
+```
+
+The returned table includes the ABCD variable name, the corresponding `ggAtlasTrack` tract name, and a descriptive tract label.
+
+# Looking up other DTI metrics
+
+To look up other DTI metrics, change the `metric` argument.
+
+For mean diffusivity:
+
+```{r abcd-lookup-md}
+atlastrack_abcd_lookup(
+  version = "6.0",
+  metric = "md",
+  shell = "fs"
+)
+```
+
+For longitudinal diffusivity:
+
+```{r abcd-lookup-ld}
+atlastrack_abcd_lookup(
+  version = "6.0",
+  metric = "ld",
+  shell = "fs"
+)
+```
+
+For transverse diffusivity:
+
+```{r abcd-lookup-td}
+atlastrack_abcd_lookup(
+  version = "6.0",
+  metric = "td",
+  shell = "fs"
+)
+```
+
+For ABCD 6.0, `shell = "fs"` uses full-shell variables and is the default. Inner-shell variables can be returned using `shell = "is"`:
+
+```{r abcd-lookup-inner-shell}
+atlastrack_abcd_lookup(
+  version = "6.0",
+  metric = "fa",
+  shell = "is"
+)
+```
+
+# Checking ABCD variable names by tract
+
+The lookup table can be used to check which ABCD variable names correspond to each AtlasTrack tract.
+
+For example, to return all ABCD 6.0 full-shell FA variable names:
+
+```{r abcd-variable-names}
+abcd_lookup <- atlastrack_abcd_lookup(
+  version = "6.0",
+  metric = "fa",
+  shell = "fs"
+)
+
+abcd_lookup$ABCD6_var_name
+```
+
+The lookup table can also be filtered to a specific tract. For example, to find the ABCD 6.0 full-shell FA variable corresponding to the left anterior thalamic radiation:
+
+```{r abcd-single-tract-fa}
+dplyr::filter(
+  atlastrack_abcd_lookup(
+    version = "6.0",
+    metric = "fa",
+    shell = "fs"
+  ),
+  tract_name == "L_ATR"
+)
+```
+
+To look up the corresponding MD variable for the same tract:
+
+```{r abcd-single-tract-md}
+dplyr::filter(
+  atlastrack_abcd_lookup(
+    version = "6.0",
+    metric = "md",
+    shell = "fs"
+  ),
+  tract_name == "L_ATR"
+)
+```
+
+This can be useful when checking that the expected ABCD DTI columns are present before converting a wide ABCD data frame into long tract-wise format.
+
+# Converting wide ABCD data to long format
+
+The `atlastrack_abcd_to_long()` function converts wide ABCD DTI data into long tract-wise format.
+
+For example, to convert ABCD 6.0 full-shell FA variables:
+
+```{r abcd-wide-to-long-fa, eval = FALSE}
+abcd_fa_long <- atlastrack_abcd_to_long(
+  data = abcd_data,
+  version = "6.0",
+  metric = "fa",
+  shell = "fs",
+  id_cols = c("participant_id", "session_id")
+)
+```
+
+The resulting data frame contains one row per participant, time point, and tract:
+
+```text
+participant_id | session_id | tract_name | tract_label                       | ABCD6_var_name                      | fa
+---------------|-----------|------------|-----------------------------------|-------------------------------------|-----
+sub-001        | ses-00A  | L_ATR      | Left anterior thalamic radiation  | mr_y_dti__fs__fa__at__atr__lh_wmean | 0.42
+sub-001        | ses-02A  | R_ATR      | Right anterior thalamic radiation | mr_y_dti__fs__fa__at__atr__rh_wmean | 0.39
+sub-002        | ses-00A | L_ATR      | Left anterior thalamic radiation  | mr_y_dti__fs__fa__at__atr__lh_wmean | 0.45
+sub-002        | ses-02A  | R_ATR      | Right anterior thalamic radiation | mr_y_dti__fs__fa__at__atr__rh_wmean | 0.41
+```
+
+To convert MD variables instead, change `metric = "md"`:
+
+```{r abcd-wide-to-long-md, eval = FALSE}
+abcd_md_long <- atlastrack_abcd_to_long(
+  data = abcd_data,
+  version = "6.0",
+  metric = "md",
+  shell = "fs",
+  id_cols = c("participant_id", "session_id")
+)
+```
+
+When the input data frame contains multiple DTI metrics, such as FA, MD, LD, and TD, it is recommended to provide `id_cols` explicitly.
+
+# Plotting summarised ABCD DTI values
+
+After converting ABCD data to long format, values can be summarised by tract and passed to `atlastrack_plot()`.
+
+For example, to plot mean FA by tract:
+
+```{r abcd-plot-mean-fa, eval = FALSE}
+tract_values <- abcd_fa_long |>
+  dplyr::group_by(tract_name) |>
+  dplyr::summarise(
+    mean_fa = mean(fa, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+atlastrack_plot(
+  data = tract_values,
+  value = mean_fa,
+  view_set = "orthogonal",
+  legend_title = "Mean FA"
+)
+```
+
+The same workflow can be used for other tract-level DTI metrics, model coefficients, feature-importance scores, or other summary values, provided the data frame contains a `tract_name` column matching the names used by `ggAtlasTrack`.
+
 # References
 
 Hagler, D. J., Jr., Ahmadi, M. E., Kuperman, J., Holland, D., McDonald, C. R., Halgren, E., & Dale, A. M. (2009). Automated white-matter tractography using a probabilistic diffusion tensor atlas: Application to temporal lobe epilepsy. *Human Brain Mapping, 30*(5), 1535–1547. https://doi.org/10.1002/hbm.20619
 
 Mowinckel, A. M., & Vidal-Piñeiro, D. (2020). Visualization of brain statistics with R packages ggseg and ggseg3d. *Advances in Methods and Practices in Psychological Science, 3*(4), 466–483. https://doi.org/10.1177/2515245920928009
-
 
 

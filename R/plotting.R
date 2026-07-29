@@ -3,8 +3,9 @@
 #' @param data Optional data frame containing tract-level values.
 #' @param value Optional unquoted column name in `data` to map to tract fill.
 #' @param tract_name Name of the tract-name column in `data`.
-#' @param view_set View set to plot. One of `"orthogonal"` or `"ggseg"`.
+#' @param view_set View set to plot. One of `"orthogonal"`, `"split"`, or `"axial"`.
 #' @param show_ventricles Logical. Whether to show ventricles.
+#' @param tract_labels Label style for the categorical tract legend. One of `"abbrev"` or `"full"`.
 #' @param low Low colour for continuous values.
 #' @param high High colour for continuous values.
 #' @param limits Optional numeric limits for continuous scale.
@@ -16,8 +17,9 @@ atlastrack_plot <- function(
     data = NULL,
     value = NULL,
     tract_name = "tract_name",
-    view_set = c("orthogonal", "ggseg", "axial"),
+    view_set = c("orthogonal", "split", "axial"),
     show_ventricles = TRUE,
+    tract_labels = c("abbrev", "full"),
     low = "#E8EEF7",
     high = "#2166AC",
     limits = NULL,
@@ -25,6 +27,7 @@ atlastrack_plot <- function(
 ) {
 
   view_set <- match.arg(view_set)
+  tract_labels <- match.arg(tract_labels)
   value_quo <- rlang::enquo(value)
 
   # ============================================================
@@ -56,7 +59,7 @@ atlastrack_plot <- function(
       x == "upper_axial" ~ "upper\naxial",
       x == "lower_axial" ~ "lower\naxial",
       x == "inferior_axial" ~ "inferior\naxial",
-      x == "middle_axial" ~ "middle\naxial",
+      x == "mid_axial" ~ "mid\naxial",
       x == "superior_axial" ~ "superior\naxial",
       x == "axial" ~ "axial",
       x == "coronal" ~ "coronal",
@@ -67,12 +70,12 @@ atlastrack_plot <- function(
 
   panel_levels <- if (view_set == "orthogonal") {
     c("axial", "coronal", "sagittal")
-  } else if (view_set == "ggseg") {
+  } else if (view_set == "split") {
     c("upper\naxial", "coronal", "lower\naxial")
   } else if (view_set == "inferior") {
     c("axial", "coronal", "inferior\naxial")
   } else if (view_set == "axial") {
-    c("inferior\naxial", "middle\naxial", "superior\naxial")
+    c("inferior\naxial", "mid\naxial", "superior\naxial")
   }
 
   add_panel_label <- function(x) {
@@ -88,6 +91,27 @@ atlastrack_plot <- function(
   bg_gm <- add_panel_label(bg_gm)
   bg_wm <- add_panel_label(bg_wm)
   bg_vent <- add_panel_label(bg_vent)
+
+  # ============================================================
+  # Orthogonal view nudging
+  # ============================================================
+
+  nudge_view_x <- function(x, panel, nudge) {
+    idx <- as.character(x$panel_label) == panel
+
+    if (any(idx)) {
+      sf::st_geometry(x)[idx] <- sf::st_geometry(x)[idx] + c(nudge, 0)
+    }
+
+    x
+  }
+
+  if (view_set == "orthogonal") {
+    tract_sf <- nudge_view_x(tract_sf, "axial", 10)
+    bg_gm <- nudge_view_x(bg_gm, "axial", 10)
+    bg_wm <- nudge_view_x(bg_wm, "axial", 10)
+    bg_vent <- nudge_view_x(bg_vent, "axial", 10)
+  }
 
   # ============================================================
   # Base brain background
@@ -112,37 +136,68 @@ atlastrack_plot <- function(
 
   if (rlang::quo_is_null(value_quo) || is.null(data)) {
 
-    tract_levels <- sort(unique(tract_sf$region))
+      tract_levels <- sort(unique(tract_sf$region))
 
-    tract_cols <- stats::setNames(
-      grDevices::hcl.colors(
-        length(tract_levels),
-        palette = "Dark 3"
-      ),
-      tract_levels
-    )
-
-    p <- p +
-      ggplot2::geom_sf(
-        data = tract_sf,
-        ggplot2::aes(fill = .data$region),
-        colour = NA
-      ) +
-      ggplot2::scale_fill_manual(
-        values = tract_cols,
-        na.value = "grey74",
-        name = ifelse(is.null(legend_title), "Tract", legend_title),
-        drop = FALSE
-      ) +
-      ggplot2::guides(
-        fill = ggplot2::guide_legend(
-          nrow = 3,
-          byrow = TRUE,
-          keywidth = grid::unit(0.35, "cm"),
-          keyheight = grid::unit(0.35, "cm"),
-          override.aes = list(colour = NA)
-        )
+      tract_cols <- stats::setNames(
+        grDevices::hcl.colors(
+          length(tract_levels),
+          palette = "Dark 3"
+        ),
+        tract_levels
       )
+
+      legend_labels <- tract_levels
+      legend_nrow <- 3
+      legend_text_size <- 8
+      legend_key_size <- 0.45
+
+      if (tract_labels == "full") {
+        tract_lookup <- atlastrack_tract_names()
+
+        full_label_lookup <- stats::setNames(
+          tract_lookup$tract_full_name,
+          tract_lookup$tract_name
+        )
+
+        legend_labels <- dplyr::recode(
+          tract_levels,
+          !!!full_label_lookup,
+          .default = tract_levels
+        )
+
+        legend_labels <- stringr::str_wrap(
+          legend_labels,
+          width = 24
+        )
+
+        legend_nrow <- 6
+        legend_text_size <- 6
+        legend_key_size <- 0.30
+      }
+
+      p <- p +
+        ggplot2::geom_sf(
+          data = tract_sf,
+          ggplot2::aes(fill = .data$region),
+          colour = NA
+        ) +
+        ggplot2::scale_fill_manual(
+          values = tract_cols,
+          breaks = tract_levels,
+          labels = legend_labels,
+          na.value = "grey74",
+          name = ifelse(is.null(legend_title), "Tract", legend_title),
+          drop = FALSE
+        ) +
+        ggplot2::guides(
+          fill = ggplot2::guide_legend(
+            nrow = legend_nrow,
+            byrow = TRUE,
+            keywidth = grid::unit(legend_key_size, "cm"),
+            keyheight = grid::unit(legend_key_size, "cm"),
+            override.aes = list(colour = NA)
+          )
+        )
 
   } else {
 
@@ -195,9 +250,31 @@ atlastrack_plot <- function(
       )
   }
 
+  panel_spacing_x <- if (view_set == "orthogonal") {
+    grid::unit(0, "lines")
+  } else {
+    grid::unit(0.4, "lines")
+  }
+
+  panel_spacing_y <- grid::unit(0.05, "lines")
+
+  legend_text_size_final <- if (exists("legend_text_size")) {
+    legend_text_size
+  } else {
+    8
+  }
+
   # ============================================================
   # Facets and theme
   # ============================================================
+
+  panel_spacing_x <- if (view_set == "orthogonal") {
+    grid::unit(0, "lines")
+  } else {
+    grid::unit(0.4, "lines")
+  }
+
+  panel_spacing_y <- grid::unit(0.05, "lines")
 
   p +
     ggplot2::facet_wrap(
@@ -228,20 +305,21 @@ atlastrack_plot <- function(
         fill = "white",
         colour = NA
       ),
-      panel.spacing = grid::unit(0.4, "lines"),
+      panel.spacing.x = panel_spacing_x,
+      panel.spacing.y = panel_spacing_y,
       legend.position = "bottom",
       legend.direction = "horizontal",
       legend.title = ggplot2::element_text(
         family = "mono",
-        size = 7,
+        size = 9,
         face = "bold"
       ),
       legend.text = ggplot2::element_text(
         family = "mono",
-        size = 6
+        size = legend_text_size_final
       ),
-      legend.key.height = grid::unit(0.35, "cm"),
-      legend.key.width = grid::unit(0.35, "cm"),
+      legend.key.height = grid::unit(0.45, "cm"),
+      legend.key.width = grid::unit(0.45, "cm"),
       legend.box.margin = ggplot2::margin(t = -3),
       plot.margin = ggplot2::margin(2, 2, 2, 2)
     )

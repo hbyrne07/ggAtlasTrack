@@ -728,7 +728,7 @@ build_atlastrack_view_set <- function(
 # ============================================================
 
 preferred_view_sets <- c(
-  "ggseg",
+  "split",
   "orthogonal",
   "axial"
 )
