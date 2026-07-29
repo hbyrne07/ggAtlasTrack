@@ -1,6 +1,6 @@
 Package: ggAtlasTrack
 Title: ggplot2 Visualisation Tools for AtlasTrack White Matter Tracts
-Version: 0.1.2
+Version: 0.1.3
 Authors@R: c(
     person("Hollie", "Byrne", email = "hollie.byrne@sydney.edu.au", role = c("aut", "cre")), 
     person("Rachel", "Visontay", role = "aut"),

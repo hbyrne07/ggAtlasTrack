@@ -1,0 +1,13 @@
+bibentry(
+  bibtype = "Manual",
+  title = "ggAtlasTrack: ggplot2-based visualisation of AtlasTrack white-matter tracts",
+  author = c(
+    person("Hollie", "Byrne"),
+    person("Rachel", "Visontay"),
+    person("Emma K.", "Devine"),
+    person("Lindsay M.", "Squeglia"),
+    person("Louise", "Mewton")),
+  year = "2026",
+  note = "R package version 0.1.2",
+  url = "https://github.com/hbyrne07/ggAtlasTrack"
+)
