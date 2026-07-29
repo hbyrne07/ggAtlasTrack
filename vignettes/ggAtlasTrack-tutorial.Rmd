@@ -47,12 +47,12 @@ This is equivalent to:
 atlastrack_plot(view_set = "orthogonal")
 ```
 
-# Plotting the ggseg-style view
+# Plotting the split-style view
 
-The `"ggseg"` view displays a split axial/coronal layout inspired by the visual style of `ggseg`.
+The `"split"` view displays a split axial/coronal layout inspired by the visual style of ggseg.
 
-```{r ggseg-plot}
-atlastrack_plot(view_set = "ggseg")
+```{r split-plot}
+atlastrack_plot(view_set = "split")
 ```
 
 # Plotting the axial view

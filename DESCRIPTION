@@ -1,6 +1,6 @@
 Package: ggAtlasTrack
 Title: ggplot2 Visualisation Tools for AtlasTrack White Matter Tracts
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
     person("Hollie", "Byrne", , "hollie.byrne@sydney.edu.au", role = c("aut", "cre"))
 Description: Provides ggplot2-based two-dimensional visualisations of AtlasTrack white-matter tract polygons in three view sets - orthogonal, ggseg, and axial. Supports categorical tract plots and tract-level continuous values.
