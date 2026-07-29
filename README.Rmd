@@ -5,6 +5,8 @@ output: github_document
 
 # ggAtlasTrack
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21670295.svg)](https://doi.org/10.5281/zenodo.12345678)
+
 `ggAtlasTrack` provides `ggplot2`-based visualisation tools for AtlasTrack white-matter tract polygons, inspired by the `ggseg` ecosystem (Mowinckel & Vidal-Piñeiro, 2020). `ggAtlasTrack` follows a similar plotting philosophy for AtlasTrack white-matter tract visualisation, while providing package-specific view sets and tract-level data mapping.
 
 The package can be used to visualise the AtlasTrack tract atlas or to map tract-level continuous values, such as coefficients, association statistics, or significance scores. It also contains helper functions for plotting data directly from the Adolescent Brain Cognitive Development (ABCD) study releases 5.0 and 6.0 onwards. Please see the vignette for further information on use.

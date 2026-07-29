@@ -3,6 +3,8 @@ ggAtlasTrack
 
 # ggAtlasTrack
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21670295.svg)](https://doi.org/10.5281/zenodo.12345678)
+
 `ggAtlasTrack` provides `ggplot2`-based visualisation tools for
 AtlasTrack white-matter tract polygons, inspired by the `ggseg`
 ecosystem (Mowinckel & Vidal-Piñeiro, 2020). `ggAtlasTrack` follows a
