@@ -3,7 +3,7 @@ ggAtlasTrack
 
 # ggAtlasTrack
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21670295.svg)](https://doi.org/10.5281/zenodo.21670295)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.21670295-blue.svg)](https://doi.org/10.5281/zenodo.21670295)
 
 `ggAtlasTrack` provides `ggplot2`-based visualisation tools for
 AtlasTrack white-matter tract polygons, inspired by the `ggseg`
