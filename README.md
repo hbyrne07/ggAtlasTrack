@@ -3,7 +3,7 @@ ggAtlasTrack
 
 # ggAtlasTrack
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21670295.svg)](https://doi.org/10.5281/zenodo.12345678)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21670295.svg)](https://doi.org/10.5281/zenodo.21670295)
 
 `ggAtlasTrack` provides `ggplot2`-based visualisation tools for
 AtlasTrack white-matter tract polygons, inspired by the `ggseg`
@@ -38,3 +38,11 @@ Mowinckel, A. M., & Vidal-Piñeiro, D. (2020). Visualization of brain
 statistics with R packages ggseg and ggseg3d. *Advances in Methods and
 Practices in Psychological Science, 3*(4), 466–483.
 <https://doi.org/10.1177/2515245920928009>
+
+## Citation
+
+If you do use `ggAtlasTrack`, please cite us using the following: Byrne,
+H., Visontay, R., Devine, E. K., Squeglia, L. M. & Mewton, L. (2026).
+ggAtlasTrack: ggplot2 Visualisation Tools for AtlasTrack White Matter
+Tracts (R Package Version v0.1.3) \[Computer software\]. Zenodo.
+<https://doi.org/10.5281/zenodo.21670295>
