@@ -152,7 +152,7 @@ atlastrack_plot <- function(
       )
 
       legend_labels <- tract_levels
-      legend_ncol <- 6
+      legend_ncol <- 8
       legend_text_size <- 8
       legend_key_size <- 0.45
 
