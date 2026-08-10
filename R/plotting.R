@@ -69,7 +69,7 @@ atlastrack_plot <- function(
   }
 
   panel_levels <- if (view_set == "orthogonal") {
-    c(" axial", "coronal", "sagittal")
+    c("axial", "coronal", "sagittal")
   } else if (view_set == "split") {
     c("upper\naxial", "coronal", "lower\naxial")
   } else if (view_set == "inferior") {
@@ -84,7 +84,7 @@ atlastrack_plot <- function(
         panel_label = make_panel_label(.data$display_view),
         panel_label = dplyr::if_else(
           view_set == "orthogonal" & .data$display_view == "axial",
-          " axial",
+          "axial",
           panel_label
         ),
         panel_label = factor(.data$panel_label, levels = panel_levels)
@@ -237,7 +237,10 @@ atlastrack_plot <- function(
           title.position = "left",
           title.hjust = 0.5,
           barwidth = grid::unit(5.5, "cm"),
-          barheight = grid::unit(0.35, "cm")
+          barheight = grid::unit(0.35, "cm"),
+          title.theme = ggplot2::element_text(
+            margin = ggplot2::margin(r = 14)
+          )
         )
       )
   }
