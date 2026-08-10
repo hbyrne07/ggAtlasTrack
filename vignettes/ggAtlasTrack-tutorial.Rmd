@@ -11,9 +11,10 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.width = 8,
-  fig.height = 4,
-  fig.align = "center"
+  fig.width = 9,
+  fig.height = 5.5,
+  fig.align = "center",
+  out.width = "100%"
 )
 ```
 
@@ -106,7 +107,7 @@ tract_values <- tibble::tibble(
   feature_importance = runif(
     length(unique(atlastrack_tracts$tract_name)),
     0,
-    1
+    0.4
   )
 )
 
@@ -126,15 +127,17 @@ atlastrack_plot(
 
 # Setting colour scale limits
 
-By default, the colour scale is based on the range of the supplied data. To anchor the scale at zero, use the `limits` argument.
+By default, the colour scale is based on the range of values in the supplied data. Setting `limits` manually can be useful when comparing plots across models, groups, or datasets.
 
-```{r feature-importance-plot-limits}
+In the example below, the same values are plotted on a fixed 0–1 scale. Because the simulated values only range from 0 to 0.4, the colours appear less saturated than in the previous plot.
+
+```{r tract-value-limits}
 atlastrack_plot(
   data = tract_values,
   value = feature_importance,
   view_set = "orthogonal",
-  limits = c(0, max(tract_values$feature_importance, na.rm = TRUE)),
-  legend_title = "Feature\nimportance"
+  legend_title = "Feature\nimportance",
+  limits = c(0, 1)
 )
 ```
 
@@ -175,7 +178,7 @@ p <- atlastrack_plot(view_set = "axial")
 ggplot2::ggsave(
   filename = "atlastrack_axial.png",
   plot = p,
-  width = 8,
+  width = 10,
   height = 4,
   dpi = 300
 )

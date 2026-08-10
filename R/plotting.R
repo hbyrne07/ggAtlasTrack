@@ -69,7 +69,7 @@ atlastrack_plot <- function(
   }
 
   panel_levels <- if (view_set == "orthogonal") {
-    c("axial", "coronal", "sagittal")
+    c(" axial", "coronal", "sagittal")
   } else if (view_set == "split") {
     c("upper\naxial", "coronal", "lower\naxial")
   } else if (view_set == "inferior") {
@@ -82,6 +82,11 @@ atlastrack_plot <- function(
     x |>
       dplyr::mutate(
         panel_label = make_panel_label(.data$display_view),
+        panel_label = dplyr::if_else(
+          view_set == "orthogonal" & .data$display_view == "axial",
+          " axial",
+          panel_label
+        ),
         panel_label = factor(.data$panel_label, levels = panel_levels)
       ) |>
       dplyr::filter(!is.na(.data$panel_label))
@@ -147,7 +152,7 @@ atlastrack_plot <- function(
       )
 
       legend_labels <- tract_levels
-      legend_nrow <- 3
+      legend_ncol <- 6
       legend_text_size <- 8
       legend_key_size <- 0.45
 
@@ -167,12 +172,12 @@ atlastrack_plot <- function(
 
         legend_labels <- stringr::str_wrap(
           legend_labels,
-          width = 24
+          width = 16
         )
 
-        legend_nrow <- 6
-        legend_text_size <- 6
-        legend_key_size <- 0.30
+        legend_ncol <- 5
+        legend_text_size <- 4.5
+        legend_key_size <- 0.18
       }
 
       p <- p +
@@ -191,7 +196,7 @@ atlastrack_plot <- function(
         ) +
         ggplot2::guides(
           fill = ggplot2::guide_legend(
-            nrow = legend_nrow,
+            ncol = legend_ncol,
             byrow = TRUE,
             keywidth = grid::unit(legend_key_size, "cm"),
             keyheight = grid::unit(legend_key_size, "cm"),
@@ -293,10 +298,12 @@ atlastrack_plot <- function(
     ggplot2::theme(
       strip.text = ggplot2::element_text(
         family = "mono",
-        size = 7,
-        colour = "grey30",
-        margin = ggplot2::margin(t = 2, b = 2)
+        size = 10.5,
+        colour = "grey20",
+        margin = ggplot2::margin(t = 0, b = 6)
       ),
+      strip.background = ggplot2::element_blank(),
+
       plot.background = ggplot2::element_rect(
         fill = "white",
         colour = NA
@@ -305,22 +312,26 @@ atlastrack_plot <- function(
         fill = "white",
         colour = NA
       ),
+
       panel.spacing.x = panel_spacing_x,
       panel.spacing.y = panel_spacing_y,
+
       legend.position = "bottom",
       legend.direction = "horizontal",
+      legend.box.margin = ggplot2::margin(t = 12, r = 0, b = 0, l = 0),
       legend.title = ggplot2::element_text(
         family = "mono",
-        size = 9,
+        size = 10.5,
         face = "bold"
       ),
       legend.text = ggplot2::element_text(
         family = "mono",
-        size = legend_text_size_final
+        size = legend_text_size_final + 1,
+        colour = "grey15"
       ),
-      legend.key.height = grid::unit(0.45, "cm"),
-      legend.key.width = grid::unit(0.45, "cm"),
-      legend.box.margin = ggplot2::margin(t = -3),
-      plot.margin = ggplot2::margin(2, 2, 2, 2)
+      legend.key.height = grid::unit(0.55, "cm"),
+      legend.key.width = grid::unit(0.55, "cm"),
+
+      plot.margin = ggplot2::margin(8, 2, 2, 2)
     )
 }
