@@ -35,5 +35,6 @@ Depends:
     R (>= 3.5)
 LazyData: true
 VignetteBuilder: knitr
-URL: https://github.com/hbyrne07/ggAtlasTrack
+URL: https://github.com/hbyrne07/ggAtlasTrack, https://hbyrne07.r-universe.dev/ggAtlasTrack
 BugReports: https://github.com/hbyrne07/ggAtlasTrack/issues
+X-schema.org-keywords: neuroimaging, diffusion MRI, DTI, white matter, tractography, AtlasTrack, ABCD, ggplot2, ggseg, brain atlas
