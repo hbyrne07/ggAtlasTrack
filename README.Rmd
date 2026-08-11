@@ -13,8 +13,21 @@ The package can be used to visualise the AtlasTrack tract atlas or to map tract-
 
 ## Installation
 
+You can install `ggAtlasTrack` from R-universe:
+
 ```{r, eval=FALSE}
-# install.packages("remotes")
+install.packages(
+  "ggAtlasTrack",
+  repos = c(
+    "https://hbyrne07.r-universe.dev",
+    "https://cloud.r-project.org"
+  )
+)
+```
+
+Alternatively, you can install the development version directly from GitHub:
+
+```{r, eval=FALSE}
 remotes::install_github("hbyrne07/ggAtlasTrack")
 ```
 
@@ -26,4 +39,5 @@ Mowinckel, A. M., & Vidal-Piñeiro, D. (2020). Visualization of brain statistics
 
 ## Citation 
 
-If you do use `ggAtlasTrack`, please cite us using the following: Byrne, H., Visontay, R., Devine, E. K., Squeglia, L. M. & Mewton, L. (2026). ggAtlasTrack: ggplot2 Visualisation Tools for AtlasTrack White Matter Tracts (R Package Version v0.1.3) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.21670295
+If you do use `ggAtlasTrack`, please cite us using the following: 
+Byrne, H., Visontay, R., Devine, E. K., Squeglia, L. M. & Mewton, L. (2026). ggAtlasTrack: ggplot2 Visualisation Tools for AtlasTrack White Matter Tracts (R Package Version v0.1.3) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.21670295
