@@ -237,7 +237,7 @@ atlastrack_plot <- function(
           title.position = "left",
           title.hjust = 0.5,
           barwidth = grid::unit(5.5, "cm"),
-          barheight = grid::unit(0.35, "cm"),
+          barheight = grid::unit(0.45, "cm"),
           title.theme = ggplot2::element_text(
             margin = ggplot2::margin(r = 14)
           )
