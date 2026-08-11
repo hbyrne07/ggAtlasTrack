@@ -1,8 +1,6 @@
 ggAtlasTrack
 ================
 
-# ggAtlasTrack
-
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.21670295-blue.svg)](https://doi.org/10.5281/zenodo.21670295)
 
 `ggAtlasTrack` provides `ggplot2`-based visualisation tools for
