@@ -1,8 +1,6 @@
 ggAtlasTrack
 ================
 
-# ggAtlasTrack
-
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.21670295-blue.svg)](https://doi.org/10.5281/zenodo.21670295)
 
 `ggAtlasTrack` provides `ggplot2`-based visualisation tools for
@@ -24,13 +22,7 @@ vignette for further information on use.
 You can install `ggAtlasTrack` from R-universe:
 
 ``` r
-install.packages(
-  "ggAtlasTrack",
-  repos = c(
-    "https://hbyrne07.r-universe.dev",
-    "https://cloud.r-project.org"
-  )
-)
+install.packages("ggAtlasTrack", repos = c("https://hbyrne07.r-universe.dev", "https://cloud.r-project.org"))
 ```
 
 Alternatively, you can install the development version directly from
